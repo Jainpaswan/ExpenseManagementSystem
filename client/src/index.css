@@ -3,3 +3,6 @@
   margin:0;
   box-sizing: border-box;
 }
+.content{
+  min-height: 84.7vh;
+}
