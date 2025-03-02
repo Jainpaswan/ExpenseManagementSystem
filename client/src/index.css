@@ -6,3 +6,9 @@
 .content{
   min-height: 84.7vh;
 }
+.register-page{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 84.7vh;
+}
