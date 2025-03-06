@@ -1,28 +1,97 @@
-import React,{useState} from "react";
+import React,{useState,useEffect} from "react";
 import Layout from "../components/Layout/Layout";
-import {  Form, Modal,Input,Select} from 'antd';
+import {  Form, Modal,Input,Select,message,Table} from 'antd';
+import axios from 'axios'
+import Spinner from '../components/Spinner'
 
 const HomePage = () => {
-  const [showModel,setShowModel]=useState(false)
+  const [showModal, setShowModal] = useState(false);
+  const [loading,setLoading]=useState(false)
+  const [allTransection, setAllTransection] = useState([]);
+
+  //table data
+  const columns = [
+    {
+      title: "Date",
+      dataIndex: "date",
+    },
+    {
+      title: "Amount",
+      dataIndex: "amount",
+    },
+    {
+      title: "Type",
+      dataIndex: "type",
+    },
+    {
+      title: "Category",
+      dataIndex: "category",
+    },
+    {
+      title: "Refrence",
+      dataIndex: "refrence",
+    },
+    {
+      title: "Actions",
+    },
+  ];
+
+  //getall transactions
+  const getAllTransactions = async () => {
+    try {
+      const user = JSON.parse(localStorage.getItem("user"));
+      setLoading(true);
+      const res = await axios.post("/transections/get-transection", {
+        userid: user._id,
+      });
+      setLoading(false);
+      setAllTransection(res.data);
+      console.log(res.data);
+    } catch (error) {
+      console.log(error);
+      message.error("Ftech Issue With Tranction");
+    }
+  };
+
+  //useEffect Hook
+  useEffect(() => {
+    getAllTransactions();
+  }, []);
+
 
   //form handling
-  const handleSubmit=(values)=>{
-    console.log(values);
-    
-  }
+  const handleSubmit = async (values) => {
+    try {
+      const user = JSON.parse(localStorage.getItem("user"));
+      setLoading(true);
+      await axios.post("/transections/add-transection", {
+        ...values,
+        userid: user._id,
+      });
+      setLoading(false);
+      message.success("Transaction Added Successfully");
+      setShowModal(false);
+    } catch (error) {
+      setLoading(false);
+      message.error("Faild to add transection");
+    }
+  };
 
 
 
   return (
     <Layout>
+      {loading && <Spinner/>}
       <div className="filters">
         <div>range filters</div>
         <div>
-          <button className="btn btn-primary" onClick={()=>setShowModel(true)}>Add New</button>
+          <button className="btn btn-primary" onClick={()=>setShowModal(true)}>Add New</button>
         </div>
       </div>
-      <div className="content"></div>
-      <Modal title="Add Transection" open={showModel} onCancel={()=>setShowModel(false)} footer={false}>
+      <div className="content">
+        <Table columns={columns} dataSource={allTransection} />
+      </div>
+      <Modal title="Add Transection" open={showModal} onCancel={()=>setShowModal(false)} footer={false}>
         <Form layout="vertical" onFinish={handleSubmit}>
           <Form.Item label="Amount"name="amount">
             <Input type="text" />

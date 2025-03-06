@@ -1,8 +1,9 @@
 const transectionModel=require("../models/transectionModel")
 
+
 const getAllTransection=async (req,res)=>{
     try {
-        const transections=await transectionModel.find({})
+        const transections=await transectionModel.find({userid:req.body.userid})
         res.status(200).json(transections)
     } catch (error) {
         console.log(error);
