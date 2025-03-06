@@ -4,8 +4,12 @@ const mongoose=require('mongoose');
 const transectionSchema=new mongoose.Schema(
     {
         amount:{
-            type:number,
+            type:Number,
             required:[true,"amount is required"],
+        },
+        type:{
+            type:String,
+            required:[true,"type is required"],
         },
         category:{
             type:String,
