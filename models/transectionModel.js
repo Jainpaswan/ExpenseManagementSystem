@@ -28,7 +28,7 @@ const transectionSchema=new mongoose.Schema(
             required:[true,"desc is required"],
         },
         date:{
-            type:String,
+            type:Date,
             required:[true,"Data is required"],
 
         },
