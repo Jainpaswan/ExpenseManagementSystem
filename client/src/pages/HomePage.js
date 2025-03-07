@@ -80,14 +80,14 @@ const HomePage = () => {
         });
         setLoading(false);
         setAllTransection(res.data);
-        console.log(res.data);
+        
       } catch (error) {
-        console.log(error);
+        
         message.error("Ftech Issue With Tranction");
       }
     };
     getAllTransactions();
-  }, [frequency, selectedDate, type]);
+  }, [frequency, selectedDate, type,setAllTransection]);
 
   //handle Delete
   const handleDelete = async (record) => {
